@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "97250797184",
+    "project_id": "simple-notas",
+    "storage_bucket": "simple-notas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97250797184:android:5f4bf2a21c1261172ea865",
+        "android_client_info": {
+          "package_name": "com.example.simplenotas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdhkj0ozfmomI6JI0DY1AUnwxkikw7oCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
