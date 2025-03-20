@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -29,24 +30,25 @@ private val PHONE_REGEX = "(\\+\\d{1,3}\\s?)?\\(?\\d{2,3}\\)?[\\s.-]?\\d{4,5}[\\
 fun ClickableTextContent(
     text: String,
     modifier: Modifier = Modifier,
+    textColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
 ) {
     val context = LocalContext.current
-    val annotatedText = buildAnnotatedString(text)
+    val annotatedText = processTextWithLinks(text)
     
+    val contentColor = LocalContentColor.current
+
     ClickableText(
         text = annotatedText,
         style = MaterialTheme.typography.bodyMedium.copy(
-            color = LocalContentColor.current
+            color = textColor
         ),
         modifier = modifier,
         onClick = { offset ->
-            // Verifica se há uma anotação de URL na posição clicada
             annotatedText.getStringAnnotations(tag = URL_TAG, start = offset, end = offset)
                 .firstOrNull()?.let { annotation ->
                     openUrl(context, annotation.item)
                 }
             
-            // Verifica se há uma anotação de telefone na posição clicada
             annotatedText.getStringAnnotations(tag = PHONE_TAG, start = offset, end = offset)
                 .firstOrNull()?.let { annotation ->
                     dialPhoneNumber(context, annotation.item)
@@ -59,7 +61,7 @@ fun ClickableTextContent(
  * Constrói um AnnotatedString com links e números de telefone clicáveis
  */
 @Composable
-private fun buildAnnotatedString(text: String): AnnotatedString {
+private fun processTextWithLinks(text: String): AnnotatedString {
     return buildAnnotatedString {
         append(text)
         

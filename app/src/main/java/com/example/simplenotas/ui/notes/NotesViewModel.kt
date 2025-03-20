@@ -73,7 +73,6 @@ class NotesViewModel(private val repository: NoteRepository) : ViewModel() {
                 0xFF00897B, // Verde-azulado mais vibrante
                 0xFF43A047, // Verde mais vibrante
                 0xFF7CB342, // Verde claro mais vibrante
-                0xFFFDD835, // Amarelo mais vibrante
                 0xFFFB8C00, // Laranja mais vibrante
                 0xFFF4511E  // Coral mais vibrante
             )
@@ -128,7 +127,6 @@ class NotesViewModel(private val repository: NoteRepository) : ViewModel() {
                 0xFF00897B, // Verde-azulado mais vibrante
                 0xFF43A047, // Verde mais vibrante
                 0xFF7CB342, // Verde claro mais vibrante
-                0xFFFDD835, // Amarelo mais vibrante
                 0xFFFB8C00, // Laranja mais vibrante
                 0xFFF4511E  // Coral mais vibrante
             )
@@ -141,7 +139,7 @@ class NotesViewModel(private val repository: NoteRepository) : ViewModel() {
             }
             
             val duplicatedNote = Note(
-                title = "Cópia de ${note.title}",
+                title = "${note.title} (Cópia)",
                 content = note.content,
                 category = note.category,
                 isFormatted = note.isFormatted,

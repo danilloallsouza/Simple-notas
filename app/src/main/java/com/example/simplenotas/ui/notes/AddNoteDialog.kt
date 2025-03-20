@@ -3,11 +3,14 @@ package com.example.simplenotas.ui.notes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -68,42 +71,49 @@ fun AddNoteDialog(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        OutlinedTextField(
-                            value = content,
-                            onValueChange = { content = it },
-                            label = { Text("Conteúdo") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(contentBoxHeight.dp),
-                            minLines = 5
-                        )
+                    // Caixa de texto para conteúdo
+                    OutlinedTextField(
+                        value = content,
+                        onValueChange = { content = it },
+                        label = { Text("Conteúdo") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = contentBoxHeight.dp)
+                            .height(IntrinsicSize.Min)
+                            .pointerInput(Unit) {
+                                detectVerticalDragGestures { change, dragAmount ->
+                                    change.consume()
+                                    val delta = dragAmount / 3
+                                    contentBoxHeight = (contentBoxHeight - delta).toInt().coerceIn(100, 500)
+                                }
+                            },
+                        minLines = 5
+                    )
 
-                        // Controles para aumentar/diminuir o tamanho da caixa de conteúdo
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
+                    // Controles para aumentar/diminuir o tamanho da caixa de conteúdo
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Tamanho da caixa:", style = MaterialTheme.typography.labelSmall)
+                        IconButton(
+                            onClick = { contentBoxHeight = (contentBoxHeight - 50).coerceAtLeast(100) },
+                            modifier = Modifier.size(24.dp)
                         ) {
-                            Text("Tamanho da caixa:", style = MaterialTheme.typography.labelSmall)
-                            IconButton(
-                                onClick = { contentBoxHeight = (contentBoxHeight - 50).coerceAtLeast(100) },
-                                modifier = Modifier.size(24.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Remove,
-                                    contentDescription = "Diminuir tamanho"
-                                )
-                            }
-                            IconButton(
-                                onClick = { contentBoxHeight = (contentBoxHeight + 50).coerceAtMost(500) },
-                                modifier = Modifier.size(24.dp)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Add,
-                                    contentDescription = "Aumentar tamanho"
-                                )
-                            }
+                            Icon(
+                                imageVector = Icons.Filled.Remove,
+                                contentDescription = "Diminuir tamanho"
+                            )
+                        }
+                        IconButton(
+                            onClick = { contentBoxHeight = (contentBoxHeight + 50).coerceAtMost(500) },
+                            modifier = Modifier.size(24.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = "Aumentar tamanho"
+                            )
                         }
                     }
 
